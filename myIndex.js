@@ -24,19 +24,18 @@ app.get('/api/hello', function (req, res) {
   res.json({ greeting: 'hello API' });
 });
 
-app.get('/api/:name', function (req, res) {
+app.get('/api/:name?', function (req, res) {
   const name = req.params.name;
   
-  // get ip
-  app.set('trust proxy', true);
-  const myIp = req.ip;
-  // get language
-  const myLanguage = req.headers["accept-language"];
-  // get software
-  const isWin = process.platform;
-
-  res.json({ "ipaddress":myIp, "language":myLanguage, "software":isWin })
-});
+  const ipaddress = req.ip;
+  const language = req.get('Accept-Language');
+  const software = req.get('User-Agent')
+  res.json({
+    ipaddress:ipaddress,
+    language:language,
+    software:software
+  })
+})
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT || 3000, function () {
